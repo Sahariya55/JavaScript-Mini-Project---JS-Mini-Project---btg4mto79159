@@ -1,41 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">        
     <head>
-        <meta charset="UTF-8">
+        <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Authentication Page</title>
-        <link rel="shortcut icon" href="https://www.gstatic.com/devrel-devsite/prod/vffb6f747a4a347f610c19877672b152494f6401418724d2bc2f21104794d57bc/cloud/images/favicons/onecloud/favicon.ico">
-    <link rel="apple-touch-icon" href="https://www.gstatic.com/devrel-devsite/prod/vffb6f747a4a347f610c19877672b152494f6401418724d2bc2f21104794d57bc/cloud/images/favicons/onecloud/super_cloud.png">
-        <link rel="stylesheet" href="styles.css">
-        <script src="App.js"></script>
-    </head>
-    <body class="login">
-        <header>
-            <p>Username="abc" & Password="123"</p>
-        </header>
-        <section class="container">
-            <h2 class="text-center">Authenticate Yourself</h2>
-            <br>
-            <section class="container2">
-                <div class="input-group">
-                    <label for="username" class="label">Username:</label>
-                    <input type="text" id="user" class="input" minlength="3" maxlenth="15" placeholder="Enter username">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Todo List 2022</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&family=Open+Sans&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./styles.css">
         
-    </div>
-    <br>
-    <div class="input-group">
-        <label for="password" class="label">Password:</label>
-        <input type="password" id="pass" class="input" minlength="8" maxlength="15" placeholder="Enter password">
-        
-        
-    </div>
-    <br>
-    
-    <button class="btn" onclick="check();">LOGIN</button>
-  
-</section>
-</section>
-    
-    </body>
-</html>
+        </head>
+        <body>
+           <main class="app">
+            <section class="greeting">
+                <h2 class="title">
+                    what's up,<input type="text" id="name" placeholder="Name here">
+                </h2>
+            </section>
+            <section class="create-todo">
+                <h3>Create a TODO-List</h3>
+                <form id="new-todo-form">
+                    <h4>What's on your todo list?</h4>
+                    <input type="text" name="content" id="content" placeholder="write todo here"/>
+                    <h4>Pick a category</h4>
+                    <div class="options">
+                        <label>
+                            <input type="radio" name="category" id="category1" value="business"/>
+                            <span class="bubble business"></span>
+                            <div>Business</div>
+                        </label>
+                        <label>
+                            <input type="radio" name="category" id="category2" value="personal"/>
+                            <span class="bubble personal"></span>
+                            <div>Personal</div>
+                        </label>
+                    </div>
+                    <input type="submit" value="Add todo"/>
+                </form>
+            </section>
+            <section class="todo-list">
+                <h3>TODO LIST</h3>
+                <div class="list" id="todo-list">
+                   <!--  <div class="todo-item done">
+                        <label>
+                            <input type="checkbox"/>
+                            <span class="bubble personal"></span>
+                        </label>
+                        <div class="todo-content">
+                           <input type="text" value="get milk" readonly/>
+                            </div>
+                        <div class="actions">
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </div>
+                    </div>
+                    <div class="todo-item">
+                        <label>
+                            <input type="checkbox"/>
+                            <span class="bubble business"></span>
+                        </label>
+                        <div class="todo-content">
+                           <input type="text" value="make a video" readonly/>
+                            </div>
+                        <div class="actions">
+                            <button class="edit">Edit</button>
+                            <button class="delete">Delete</button>
+                        </div>
+                    </div> -->
+                </div>
+            </section>
+           </main>
+       
+
+            
+           <script src="./App.js"></script>
+        </body>
+        </html>
