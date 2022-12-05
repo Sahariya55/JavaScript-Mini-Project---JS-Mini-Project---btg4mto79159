@@ -1,118 +1,108 @@
-window.addEventListener('load', () => {
-	todos = JSON.parse(localStorage.getItem('todos')) || [];
-	const nameInput = document.querySelector('#name');
-	const newTodoForm = document.querySelector('#new-todo-form');
+const resultEl = document.getElementById('result');
+const lengthEl = document.getElementById('length');
+const uppercaseEl = document.getElementById('uppercase');
+const lowercaseEl = document.getElementById('lowercase');
+const numbersEl = document.getElementById('numbers');
+const symbolsEl = document.getElementById('symbols');
+const generateEl = document.getElementById('generate');
+const clipboardEl = document.getElementById('clipboard');
 
-	const username = localStorage.getItem('username') || '';
+const randomFun = {
+	lower: getRandomLower,
+	upper: getRandomUpper,
+	number: getRandomNumber,
+	symbol: getRandomSymbol,
+};
 
-	nameInput.value = username;
+/* Generate Event Listen */
+generateEl.addEventListener('click', () => {
+	const length = +lengthEl.value; // + = convert to numbers
+	const hasLower = lowercaseEl.checked;
+	const hasUpper = uppercaseEl.checked;
+	const hasNumber = numbersEl.checked;
+	const hasSymbol = symbolsEl.checked;
 
-	nameInput.addEventListener('change', (e) => {
-		localStorage.setItem('username', e.target.value);
-	})
+	resultEl.innerText = generatePassword(
+		hasLower,
+		hasUpper,
+		hasNumber,
+		hasSymbol,
+		length
+	);
+});
 
-	newTodoForm.addEventListener('submit', e => {
-		e.preventDefault();
+// Copy password to clipboard
+clipboardEl.addEventListener('click', () => {
+	const textarea = document.createElement('textarea');
+	const password = resultEl.innerText;
 
-		const todo = {
-			content: e.target.elements.content.value,
-			category: e.target.elements.category.value,
-			done: false,
-			createdAt: new Date().getTime()
-		}
+	if (!password) {
+		return;
+	}
 
-		todos.push(todo);
+	textarea.value = password;
+	document.body.appendChild(textarea);
+	textarea.select();
 
-		localStorage.setItem('todos', JSON.stringify(todos));
+	textarea.remove();
+	alert('Password copied to clipboard');
+});
 
-		// Reset the form
-		e.target.reset();
+function generatePassword(lower, upper, number, symbol, length) {
+	// 1. Initialize PWD Variables
+	// 2. Filter out unchecked types
+	// 3. Loop over length call generator function for each type
+	// 4. Add final PWD to the PWD Variables and Return
 
-		DisplayTodos()
-	})
+	let generatedPassword = '';
 
-	DisplayTodos()
-})
+	const typeCount = lower + upper + number + symbol;
 
-function DisplayTodos () {
-	const todoList = document.querySelector('#todo-list');
-	todoList.innerHTML = "";
+	// console.log('typeCount :', typeCount);
 
-	todos.forEach(todo => {
-		const todoItem = document.createElement('div');
-		todoItem.classList.add('todo-item');
+	const typeArray = [{ lower }, { upper }, { number }, { symbol }].filter(
+		(item) => Object.values(item)[0]
+	);
 
-		const label = document.createElement('label');
-		const input = document.createElement('input');
-		const span = document.createElement('span');
-		const content = document.createElement('div');
-		const actions = document.createElement('div');
-		const edit = document.createElement('button');
-		const deleteButton = document.createElement('button');
+	// console.log('typeArray :', typeArray);
 
-		input.type = 'checkbox';
-		input.checked = todo.done;
-		span.classList.add('bubble');
-		if (todo.category == 'personal') {
-			span.classList.add('personal');
-		} else {
-			span.classList.add('business');
-		}
-		content.classList.add('todo-content');
-		actions.classList.add('actions');
-		edit.classList.add('edit');
-		deleteButton.classList.add('delete');
+	if (typeCount === 0) {
+		return '';
+	}
 
-		content.innerHTML = `<input type="text" value="${todo.content}" readonly>`;
-		edit.innerHTML = 'Edit';
-		deleteButton.innerHTML = 'Delete';
+	for (let i = 0; i < length; i += typeCount) {
+		typeArray.forEach((type) => {
+			const funcName = Object.keys(type)[0];
 
-		label.appendChild(input);
-		label.appendChild(span);
-		actions.appendChild(edit);
-		actions.appendChild(deleteButton);
-		todoItem.appendChild(label);
-		todoItem.appendChild(content);
-		todoItem.appendChild(actions);
+			// console.log('funcName :', funcName);
 
-		todoList.appendChild(todoItem);
+			generatedPassword += randomFun[funcName]();
+		});
+	}
 
-		if (todo.done) {
-			todoItem.classList.add('done');
-		}
-		
-		input.addEventListener('change', (e) => {
-			todo.done = e.target.checked;
-			localStorage.setItem('todos', JSON.stringify(todos));
+	const finalPassword = generatedPassword.slice(0, length);
 
-			if (todo.done) {
-				todoItem.classList.add('done');
-			} else {
-				todoItem.classList.remove('done');
-			}
+	console.log(finalPassword);
 
-			DisplayTodos()
+	return finalPassword;
+}
 
-		})
+/* Generator Function - https://net-comber.com/charset.html */
 
-		edit.addEventListener('click', (e) => {
-			const input = content.querySelector('input');
-			input.removeAttribute('readonly');
-			input.focus();
-			input.addEventListener('blur', (e) => {
-				input.setAttribute('readonly', true);
-				todo.content = e.target.value;
-				localStorage.setItem('todos', JSON.stringify(todos));
-				DisplayTodos()
+function getRandomLower() {
+	return String.fromCharCode(Math.floor(Math.random() * 26) + 97);
+}
 
-			})
-		})
+function getRandomUpper() {
+	return String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+}
 
-		deleteButton.addEventListener('click', (e) => {
-			todos = todos.filter(t => t != todo);
-			localStorage.setItem('todos', JSON.stringify(todos));
-			DisplayTodos()
-		})
+function getRandomNumber() {
+	return String.fromCharCode(Math.floor(Math.random() * 10) + 48);
+}
 
-	})
+function getRandomSymbol() {
+	const symbols = '~`!#$%^&*()-_+|?.,<>"{}=/';
+
+	return symbols[Math.floor(Math.random() * symbols.length)];
 }
